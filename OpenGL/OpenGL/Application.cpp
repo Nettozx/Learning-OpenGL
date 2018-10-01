@@ -5,17 +5,21 @@
 #include <string>
 #include <sstream>
 
+#define ASSERT(x) if (!(x)) __debugbreak();
+
 static void GLClearError()
 {
 	while (glGetError() != GL_NO_ERROR);
 };
 
-static void GLCheckError()
+static bool GLLogCall()
 {
 	while (GLenum error = glGetError())
 	{
 		std::cout << "[OpenGL Error] (" << error << ")\n";
+		return false;
 	}
+	return true;
 }
 
 //so we can return multiple things
@@ -181,7 +185,7 @@ int main(void)
 		//this draws the last item that was selected using glBindBuffer
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 		//get errors
-		GLCheckError();
+		ASSERT(GLLogCall());
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
