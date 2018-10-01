@@ -118,17 +118,21 @@ int main(void)
 	   -0.5f, -0.5f, //x,y of vertex
 		0.5f, -0.5f,
 		0.5f,  0.5f,
+	   -0.5f,  0.5f
+	};
 
-		0.5f,  0.5f,
-	   -0.5f,  0.5f,
-	   -0.5f, -0.5f
+	//index buffer, so we don't have redundant positions
+	unsigned int indicies[] =
+	{
+		0, 1, 2, //refers to lines of xy in positions[]
+		2, 3, 0
 	};
 
 	unsigned int buffer;
 	glGenBuffers(1, &buffer); //generate buffer with id and address
 	glBindBuffer(GL_ARRAY_BUFFER, buffer); //select buffer
 	//put data in buffer
-	glBufferData(GL_ARRAY_BUFFER, 6 * 2 * sizeof(float), positions, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(float), positions, GL_STATIC_DRAW);
 	
 	//enable vertexattrib
 	glEnableVertexAttribArray(0);
@@ -139,6 +143,13 @@ int main(void)
 	//amount of offset to get to the next vertex = 2 floats the x and y
 	//no offset
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
+
+	//use our index buffer to draw a square
+	unsigned int ibo;
+	glGenBuffers(1, &ibo); //generate buffer with id and address
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo); //select buffer
+	//put data in buffer
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indicies, GL_STATIC_DRAW);
 
 	//make a shader
 	ShaderProgramSource source = ParseShader("Basic.shader");
@@ -153,7 +164,7 @@ int main(void)
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		//this draws the last item that was selected using glBindBuffer
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
