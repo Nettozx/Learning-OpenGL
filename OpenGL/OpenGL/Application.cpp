@@ -138,13 +138,9 @@ int main(void)
 
 	//make a shader
 	ShaderProgramSource source = ParseShader("Basic.shader");
-	std::cout << "VERTEX\n";
-	std::cout << source.VertexSource << std::endl;
-	std::cout << "FRAGMENT\n";
-	std::cout << source.FragmentSource << std::endl;
 
-	//unsigned int shader = CreateShader(vertexShader, fragmentShader);
-	//glUseProgram(shader);
+	unsigned int shader = CreateShader(source.VertexSource, source.FragmentSource);
+	glUseProgram(shader);
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
@@ -162,7 +158,7 @@ int main(void)
 		glfwPollEvents();
 	}
 
-	//glDeleteProgram(shader);
+	glDeleteProgram(shader);
 
 	glfwTerminate();
 	return 0;
