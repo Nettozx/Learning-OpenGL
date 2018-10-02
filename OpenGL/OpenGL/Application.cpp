@@ -8,6 +8,7 @@
 #include "Renderer.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "VertexArray.h"
 
 //so we can return multiple things
 struct ShaderProgramSource
@@ -141,17 +142,12 @@ int main(void)
 		GLCall(glGenVertexArrays(1, &vao));
 		GLCall(glBindVertexArray(vao));
 
+		VertexArray va;
 		VertexBuffer vb(positions, 4 * 2 * sizeof(float));
 
-		//enable vertexattrib
-		GLCall(glEnableVertexAttribArray(0));
-		//index 0 because its first attirbute
-		//2 coordinate position so size is 2
-		//type of positions is floats
-		//no normalization yet
-		//amount of offset to get to the next vertex = 2 floats the x and y
-		//no offset
-		GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0));
+		VertexBufferLayout layout;
+		layout.Push<float>(2);
+		va.AddBuffer(vb, layout);
 
 		IndexBuffer ib(indicies, 6);
 
@@ -187,7 +183,7 @@ int main(void)
 			GLCall(glUniform4f(location, r, 0.3f, 0.8f, 1.0f));
 
 			//bind everything
-			GLCall(glBindVertexArray(vao));
+			va.Bind();
 			ib.Bind();
 
 			//this draws the last item that was selected using glBindBuffer
