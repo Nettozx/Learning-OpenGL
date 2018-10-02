@@ -152,6 +152,11 @@ int main(void)
 		2, 3, 0
 	};
 
+	//vertex array
+	unsigned int vao;
+	GLCall(glGenVertexArrays(1, &vao));
+	GLCall(glBindVertexArray(vao));
+
 	unsigned int buffer;
 	GLCall(glGenBuffers(1, &buffer)); //generate buffer with id and address
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, buffer)); //select buffer
@@ -186,6 +191,12 @@ int main(void)
 	ASSERT(location != -1);
 	GLCall(glUniform4f(location, 0.2f, 0.3f, 0.8f, 1.0f));
 
+	//unbind everything
+	GLCall(glBindVertexArray(0));
+	GLCall(glUseProgram(0));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+
 	float r = 0.0f;
 	float increment = 0.05f;
 
@@ -195,8 +206,14 @@ int main(void)
 		/* Render here */
 		GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
+		GLCall(glUseProgram(shader));
+
 		//animate colors by changing value of red
 		GLCall(glUniform4f(location, r, 0.3f, 0.8f, 1.0f));
+
+		//bind everything
+		GLCall(glBindVertexArray(vao));
+		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
 
 		//this draws the last item that was selected using glBindBuffer
 		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
