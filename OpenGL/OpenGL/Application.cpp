@@ -6,6 +6,8 @@
 #include <sstream>
 
 #include "Renderer.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
 
 //so we can return multiple things
 struct ShaderProgramSource
