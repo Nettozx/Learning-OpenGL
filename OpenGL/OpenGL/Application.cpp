@@ -178,6 +178,11 @@ int main(void)
 	unsigned int shader = CreateShader(source.VertexSource, source.FragmentSource);
 	GLCall(glUseProgram(shader));
 
+	//uniforms let you send data from cpu to gpu
+	GLCall(int location = glGetUniformLocation(shader, "u_Color"));
+	ASSERT(location != -1);
+	GLCall(glUniform4f(location, 0.2f, 0.3f, 0.8f, 1.0f));
+
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
