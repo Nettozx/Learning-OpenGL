@@ -141,11 +141,7 @@ int main(void)
 	GLCall(glGenVertexArrays(1, &vao));
 	GLCall(glBindVertexArray(vao));
 
-	unsigned int buffer;
-	GLCall(glGenBuffers(1, &buffer)); //generate buffer with id and address
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, buffer)); //select buffer
-	//put data in buffer
-	GLCall(glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(float), positions, GL_STATIC_DRAW));
+	VertexBuffer vb(positions, 4 * 2 * sizeof(float));
 	
 	//enable vertexattrib
 	GLCall(glEnableVertexAttribArray(0));
@@ -157,12 +153,7 @@ int main(void)
 	//no offset
 	GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0));
 
-	//use our index buffer to draw a square
-	unsigned int ibo;
-	GLCall(glGenBuffers(1, &ibo)); //generate buffer with id and address
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo)); //select buffer
-	//put data in buffer
-	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indicies, GL_STATIC_DRAW));
+	IndexBuffer ib(indicies, 6);
 
 	//make a shader
 	ShaderProgramSource source = ParseShader("Basic.shader");
@@ -197,7 +188,7 @@ int main(void)
 
 		//bind everything
 		GLCall(glBindVertexArray(vao));
-		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
+		ib.Bind();
 
 		//this draws the last item that was selected using glBindBuffer
 		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
