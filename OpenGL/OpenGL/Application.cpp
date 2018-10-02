@@ -128,6 +128,9 @@ int main(void)
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 
+	//make framerate match monitor vsync
+	glfwSwapInterval(1);
+
 	/* initialize glew */
 	if (glewInit() != GLEW_OK)
 		std::cout << "Error!" << std::endl;
@@ -183,14 +186,27 @@ int main(void)
 	ASSERT(location != -1);
 	GLCall(glUniform4f(location, 0.2f, 0.3f, 0.8f, 1.0f));
 
+	float r = 0.0f;
+	float increment = 0.05f;
+
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
 		/* Render here */
 		GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
+		//animate colors by changing value of red
+		GLCall(glUniform4f(location, r, 0.3f, 0.8f, 1.0f));
+
 		//this draws the last item that was selected using glBindBuffer
 		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+
+		//change value of red
+		if (r > 1.0f)
+			increment = -0.05f;
+		else if (r < 0.0f)
+			increment = 0.05f;
+		r += increment;
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
