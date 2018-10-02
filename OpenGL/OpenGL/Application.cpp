@@ -119,96 +119,96 @@ int main(void)
 		std::cout << "Error!" << std::endl;
 
 	std::cout << glGetString(GL_VERSION) << std::endl;
-
-	//triangle positions
-	float positions[] = {
-	   -0.5f, -0.5f, //x,y of vertex
-		0.5f, -0.5f,
-		0.5f,  0.5f,
-	   -0.5f,  0.5f
-	};
-
-	//index buffer, so we don't have redundant positions
-	unsigned int indicies[] =
 	{
-		0, 1, 2, //refers to lines of xy in positions[]
-		2, 3, 0
-	};
+		//triangle positions
+		float positions[] = {
+		   -0.5f, -0.5f, //x,y of vertex
+			0.5f, -0.5f,
+			0.5f,  0.5f,
+		   -0.5f,  0.5f
+		};
 
-	//vertex array, if you use gl core you need this, if you use gl compat profile
-	//	it makes a default one for you and binds it.
-	unsigned int vao;
-	GLCall(glGenVertexArrays(1, &vao));
-	GLCall(glBindVertexArray(vao));
+		//index buffer, so we don't have redundant positions
+		unsigned int indicies[] =
+		{
+			0, 1, 2, //refers to lines of xy in positions[]
+			2, 3, 0
+		};
 
-	VertexBuffer vb(positions, 4 * 2 * sizeof(float));
-	
-	//enable vertexattrib
-	GLCall(glEnableVertexAttribArray(0));
-	//index 0 because its first attirbute
-	//2 coordinate position so size is 2
-	//type of positions is floats
-	//no normalization yet
-	//amount of offset to get to the next vertex = 2 floats the x and y
-	//no offset
-	GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0));
+		//vertex array, if you use gl core you need this, if you use gl compat profile
+		//	it makes a default one for you and binds it.
+		unsigned int vao;
+		GLCall(glGenVertexArrays(1, &vao));
+		GLCall(glBindVertexArray(vao));
 
-	IndexBuffer ib(indicies, 6);
+		VertexBuffer vb(positions, 4 * 2 * sizeof(float));
 
-	//make a shader
-	ShaderProgramSource source = ParseShader("Basic.shader");
+		//enable vertexattrib
+		GLCall(glEnableVertexAttribArray(0));
+		//index 0 because its first attirbute
+		//2 coordinate position so size is 2
+		//type of positions is floats
+		//no normalization yet
+		//amount of offset to get to the next vertex = 2 floats the x and y
+		//no offset
+		GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0));
 
-	unsigned int shader = CreateShader(source.VertexSource, source.FragmentSource);
-	GLCall(glUseProgram(shader));
+		IndexBuffer ib(indicies, 6);
 
-	//uniforms let you send data from cpu to gpu
-	GLCall(int location = glGetUniformLocation(shader, "u_Color"));
-	ASSERT(location != -1);
-	GLCall(glUniform4f(location, 0.2f, 0.3f, 0.8f, 1.0f));
+		//make a shader
+		ShaderProgramSource source = ParseShader("Basic.shader");
 
-	//unbind everything
-	GLCall(glBindVertexArray(0));
-	GLCall(glUseProgram(0));
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-
-	float r = 0.0f;
-	float increment = 0.05f;
-
-	/* Loop until the user closes the window */
-	while (!glfwWindowShouldClose(window))
-	{
-		/* Render here */
-		GLCall(glClear(GL_COLOR_BUFFER_BIT));
-
+		unsigned int shader = CreateShader(source.VertexSource, source.FragmentSource);
 		GLCall(glUseProgram(shader));
 
-		//animate colors by changing value of red
-		GLCall(glUniform4f(location, r, 0.3f, 0.8f, 1.0f));
+		//uniforms let you send data from cpu to gpu
+		GLCall(int location = glGetUniformLocation(shader, "u_Color"));
+		ASSERT(location != -1);
+		GLCall(glUniform4f(location, 0.2f, 0.3f, 0.8f, 1.0f));
 
-		//bind everything
-		GLCall(glBindVertexArray(vao));
-		ib.Bind();
+		//unbind everything
+		GLCall(glBindVertexArray(0));
+		GLCall(glUseProgram(0));
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 
-		//this draws the last item that was selected using glBindBuffer
-		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+		float r = 0.0f;
+		float increment = 0.05f;
 
-		//change value of red
-		if (r > 1.0f)
-			increment = -0.05f;
-		else if (r < 0.0f)
-			increment = 0.05f;
-		r += increment;
+		/* Loop until the user closes the window */
+		while (!glfwWindowShouldClose(window))
+		{
+			/* Render here */
+			GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
-		/* Swap front and back buffers */
-		glfwSwapBuffers(window);
+			GLCall(glUseProgram(shader));
 
-		/* Poll for and process events */
-		glfwPollEvents();
+			//animate colors by changing value of red
+			GLCall(glUniform4f(location, r, 0.3f, 0.8f, 1.0f));
+
+			//bind everything
+			GLCall(glBindVertexArray(vao));
+			ib.Bind();
+
+			//this draws the last item that was selected using glBindBuffer
+			GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+
+			//change value of red
+			if (r > 1.0f)
+				increment = -0.05f;
+			else if (r < 0.0f)
+				increment = 0.05f;
+			r += increment;
+
+			/* Swap front and back buffers */
+			glfwSwapBuffers(window);
+
+			/* Poll for and process events */
+			glfwPollEvents();
+		}
+
+		GLCall(glDeleteProgram(shader));
 	}
-
-	GLCall(glDeleteProgram(shader));
-
 	glfwTerminate();
 	return 0;
 }
