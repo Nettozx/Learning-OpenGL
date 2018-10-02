@@ -152,7 +152,8 @@ int main(void)
 		2, 3, 0
 	};
 
-	//vertex array
+	//vertex array, if you use gl core you need this, if you use gl compat profile
+	//	it makes a default one for you and binds it.
 	unsigned int vao;
 	GLCall(glGenVertexArrays(1, &vao));
 	GLCall(glBindVertexArray(vao));
