@@ -136,12 +136,6 @@ int main(void)
 			2, 3, 0
 		};
 
-		//vertex array, if you use gl core you need this, if you use gl compat profile
-		//	it makes a default one for you and binds it.
-		unsigned int vao;
-		GLCall(glGenVertexArrays(1, &vao));
-		GLCall(glBindVertexArray(vao));
-
 		VertexArray va;
 		VertexBuffer vb(positions, 4 * 2 * sizeof(float));
 
@@ -163,7 +157,7 @@ int main(void)
 		GLCall(glUniform4f(location, 0.2f, 0.3f, 0.8f, 1.0f));
 
 		//unbind everything
-		GLCall(glBindVertexArray(0));
+		va.Unbind();
 		GLCall(glUseProgram(0));
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
