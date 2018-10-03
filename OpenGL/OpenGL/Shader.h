@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <unordered_map>
 
 //so we can return multiple things
 struct ShaderProgramSource
@@ -14,7 +15,7 @@ class Shader
 private:
 	std::string m_FilePath;
 	unsigned int m_RendererID;
-	//caching for uniforms
+	std::unordered_map<std::string, int> m_UniformLocationCache;
 public:
 	Shader(const std::string& filepath);
 	~Shader();

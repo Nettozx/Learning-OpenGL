@@ -8,6 +8,7 @@
 
 #include "Renderer.h"
 #include "VertexBuffer.h"
+#include "VertexBufferLayout.h"
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
@@ -73,9 +74,11 @@ int main(void)
 
 		//unbind everything
 		va.Unbind();
-		shader.Unbind();
 		vb.Unbind();
 		ib.Unbind();
+		shader.Unbind();
+
+		Renderer renderer;
 
 		float r = 0.0f;
 		float increment = 0.05f;
@@ -90,12 +93,7 @@ int main(void)
 			//animate colors by changing value of red
 			shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
 
-			//bind everything
-			va.Bind();
-			ib.Bind();
-
-			//this draws the last item that was selected using glBindBuffer
-			GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+			renderer.Draw(va, ib, shader);
 
 			//change value of red
 			if (r > 1.0f)

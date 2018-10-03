@@ -1,5 +1,9 @@
 ﻿  Application.cpp
+  IndexBuffer.cpp
+  Renderer.cpp
   Shader.cpp
+  VertexArray.cpp
+  VertexBuffer.cpp
   Generating Code...
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
