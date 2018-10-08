@@ -22,6 +22,9 @@
     <Filter Include="Source Files\vendor\stb_image">
       <UniqueIdentifier>{d5a26167-de8f-46f3-87d4-196597d87dd0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\vendor\glm">
+      <UniqueIdentifier>{66d41309-8eb2-4af1-a9b7-46939a5ac8b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -42,11 +45,11 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stb_image.cpp">
-      <Filter>Source Files\vendor\stb_image</Filter>
-    </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vendors\stb_image.cpp">
+      <Filter>Source Files\vendor\stb_image</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -73,11 +76,14 @@
     <ClInclude Include="Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stb_image.h">
-      <Filter>Source Files\vendor\stb_image</Filter>
-    </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vendors\stb_image.h">
+      <Filter>Source Files\vendor\stb_image</Filter>
+    </ClInclude>
+    <ClInclude Include="Vendors\glm\glm.hpp">
+      <Filter>Source Files\vendor\glm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

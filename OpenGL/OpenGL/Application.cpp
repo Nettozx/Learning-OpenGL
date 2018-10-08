@@ -14,6 +14,9 @@
 #include "Shader.h"
 #include "Texture.h"
 
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+
 int main(void)
 {
 	GLFWwindow* window;
@@ -71,12 +74,16 @@ int main(void)
 
 		IndexBuffer ib(indicies, 6);
 
+		//a way to map to a 2d coordinate plane but things farther away don't get smaller
+		glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+
 		//make a shader
 		Shader shader("Basic.shader");
 		shader.Bind();
 
 		//uniforms let you send data from cpu to gpu
 		shader.SetUniform4f("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
+		shader.SetUniformMat4f("u_MVP", proj);
 
 		//set a texture
 		Texture texture("ZERO.png");
